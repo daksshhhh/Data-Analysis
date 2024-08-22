@@ -12,3 +12,12 @@ This script removes descriptors (columns) from a CSV file where more than 15% of
 - `pandas`
 - `Tkinter`
 
+# Plot Visualize
+This script allows you to plot RMSD data from multiple .xvg files. It creates a comparison plot of the RMSD values over time.
+
+Usage:
+Select your .xvg files.
+The script will generate an RMSD comparison plot for each file.
+Dependencies:
+matplotlib
+Tkinter
