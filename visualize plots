@@ -1,0 +1,50 @@
+import matplotlib.pyplot as plt
+import tkinter as tk
+from tkinter import filedialog
+import re
+
+def browse_files():
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+
+    file_paths = filedialog.askopenfilenames(title="Select XVG files",
+                                             filetypes=(("XVG files", "*.xvg"), ("All files", "*.*")))
+    return file_paths
+
+def plot_xvg(file_paths):
+    plt.figure(figsize=(10, 6))
+
+    for file_path in file_paths:
+        # Extracting filename from the path
+        file_name = re.findall(r'[^\\/]+(?=\.)', file_path)[-1]
+        
+        # Loading data from XVG file
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+
+        # Extracting time and RMSD values
+        time = []
+        rmsd = []
+        for line in lines:
+            if line.startswith('@') or line.startswith('#'):
+                continue
+            parts = line.split()
+            time.append(float(parts[0]))
+            rmsd.append(float(parts[1]))
+
+        # Plotting RMSD data
+        plt.plot(time, rmsd, label=file_name)
+
+    plt.xlabel('Time (ps)')
+    plt.ylabel('RMSD (nm)')
+    plt.title('RMSD Comparison')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+if __name__ == "__main__":
+    file_paths = browse_files()
+    if file_paths:
+        plot_xvg(file_paths)
+    else:
+        print("No file selected.")
